@@ -1,0 +1,180 @@
+/**
+ * Modal Product Card Fix Styles
+ * This CSS ensures proper styling of product cards within modals
+ */
+
+/* Modal product grid layout */
+.modal-products {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+  gap: 25px !important;
+  margin-top: 20px !important;
+}
+
+/* Fix showcase styles in modals */
+.modal .showcase {
+  display: block;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  background: white;
+  overflow: hidden;
+}
+
+.modal .showcase:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Fix showcase banner and images */
+.modal .showcase-banner {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.modal .showcase-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+  display: block;
+}
+
+.modal .showcase:hover .product-img.default {
+  opacity: 0;
+}
+
+.modal .showcase:hover .product-img.hover {
+  opacity: 1;
+}
+
+.modal .product-img.hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+/* Showcase badge */
+.modal .showcase-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: var(--furnifind-primary, #4e8d7c);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25em 0.75em;
+  border-radius: 4px;
+  z-index: 3;
+}
+
+.modal .showcase-badge.angle {
+  border-radius: 0;
+}
+
+.modal .showcase-badge.black {
+  background: #000;
+}
+
+.modal .showcase-badge.pink {
+  background: #ff6b6b;
+}
+
+/* Showcase content */
+.modal .showcase-content {
+  padding: 15px;
+}
+
+.modal .showcase-category {
+  color: var(--furnifind-secondary, #777);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.modal .showcase-title {
+  font-size: 1rem;
+  color: var(--furnifind-dark, #333);
+  font-weight: 600;
+  margin-bottom: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Showcase rating */
+.modal .showcase-rating {
+  color: #ffcc33;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+/* Price box */
+.modal .price-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.modal .price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--furnifind-primary, #4e8d7c);
+}
+
+.modal del {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* Action buttons */
+.modal .showcase-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform: translateX(50px);
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 3;
+}
+
+.modal .showcase:hover .showcase-actions {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.modal .btn-action {
+  background: white;
+  color: var(--furnifind-dark, #333);
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.modal .btn-action:hover {
+  background: var(--furnifind-primary, #4e8d7c);
+  color: white;
+}

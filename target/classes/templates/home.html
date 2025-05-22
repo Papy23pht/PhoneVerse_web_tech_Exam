@@ -1,0 +1,2194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="_csrf" th:content="${_csrf != null ? _csrf.token : ''}" />
+    <meta
+      name="_csrf_header"
+      th:content="${_csrf != null ? _csrf.headerName : ''}"
+    />
+    <title>PhoneVerse | Latest Smartphones & Electronics</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+    <link rel="stylesheet" th:href="@{/css/cart-animation.css}" />
+    <link rel="stylesheet" th:href="@{/css/cart-counter.css}" />
+    <link rel="stylesheet" th:href="@{/css/navigation.css}" />
+    <link rel="stylesheet" th:href="@{/css/theme-migration.css}" />
+    <link rel="stylesheet" th:href="@{/css/furniture-cart.css}" />
+    <link rel="stylesheet" th:href="@{/css/toast-notifications.css}" />
+
+    <link rel="stylesheet" th:href="@{/css/furnifind-theme.css}" />
+    <link rel="stylesheet" th:href="@{/css/furnifind-redesign.css}" />
+    <link rel="stylesheet" th:href="@{/css/floating-sidebar.css}" />
+    <link rel="stylesheet" th:href="@{/css/icon-fix.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal-product-fix.css}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Load ionicons early to ensure icons are visible -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <script th:src="@{/js/config/app-config.js}"></script>
+    <script th:src="@{/js/counter-unified.js}"></script>
+    <script th:src="@{/js/furnifind-migration.js}"></script>
+    <script th:src="@{/js/sidebar-toggle-1.js}"></script>
+    <script th:src="@{/js/floating-sidebar.js}"></script>
+    <link
+      rel="shortcut icon"
+      href="https://cdn-icons-png.flaticon.com/512/3249/3249937.png"
+      type="image/png"
+    />
+  </head>
+  <body>
+    <div class="overlay" data-overlay></div>
+    <!-- Mobile Sidebar Navigation (only visible when toggled on mobile) -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <h1>
+          <ion-icon name="phone-portrait-outline"></ion-icon>
+          <span>Phone<span class="accent">Verse</span></span>
+        </h1>
+      </div>
+      <nav class="sidebar-nav">
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="/" class="sidebar-nav-link active">
+              <ion-icon name="home-outline"></ion-icon>
+              <span>Home</span>
+            </a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="/wishlist" class="sidebar-nav-link">
+              <ion-icon name="heart-outline"></ion-icon>
+              <span>Your Wishlist</span>
+            </a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="/cart" class="sidebar-nav-link">
+              <ion-icon name="bag-handle-outline"></ion-icon>
+              <span>Cart</span>
+            </a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="/products" class="sidebar-nav-link">
+              <ion-icon name="storefront-outline"></ion-icon>
+              <span>Products</span>
+            </a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a class="sidebar-nav-link mobile-menu-dropdown-btn">
+              <ion-icon name="cog-outline"></ion-icon>
+              <span>Option</span>
+            </a>
+            <div class="mobile-menu-dropdown">
+              <div class="mobile-dropdown-content">
+                <a th:href="@{/profile}" sec:authorize="isAuthenticated()">
+                  <ion-icon name="person-outline"></ion-icon> Profile
+                </a>
+                <a th:href="@{/about}">
+                  <ion-icon name="information-circle-outline"></ion-icon> About
+                  Us
+                </a>
+                <form
+                  th:action="@{/logout}"
+                  method="post"
+                  sec:authorize="isAuthenticated()"
+                >
+                  <button type="submit" class="dropdown-menu-button">
+                    <ion-icon name="log-out-outline"></ion-icon> Logout
+                  </button>
+                </form>
+                <a th:href="@{/login}" sec:authorize="!isAuthenticated()">
+                  <ion-icon name="log-in-outline"></ion-icon> Login
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Floating Sidebar (only visible on desktop) -->
+    <aside class="floating-sidebar">
+      <nav class="sidebar-nav">
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="/" class="sidebar-nav-link active">
+              <ion-icon name="home-outline"></ion-icon>
+              <span class="tooltip">Home</span>
+            </a>
+          </li>
+          <!-- Standard navigation links -->
+          <li class="sidebar-nav-item">
+            <a href="/wishlist" class="sidebar-nav-link">
+              <ion-icon name="heart-outline"></ion-icon>
+              <span class="tooltip">Wishlist</span>
+            </a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="/cart" class="sidebar-nav-link">
+              <ion-icon name="bag-handle-outline"></ion-icon>
+              <span class="tooltip">Cart</span>
+            </a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="/products" class="sidebar-nav-link">
+              <ion-icon name="storefront-outline"></ion-icon>
+              <span class="tooltip">Products</span>
+            </a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a class="sidebar-nav-link mobile-menu-dropdown-btn">
+              <ion-icon name="cog-outline"></ion-icon>
+              <span class="tooltip">Options</span>
+            </a>
+            <div class="mobile-menu-dropdown">
+              <div class="mobile-dropdown-content">
+                <a th:href="@{/profile}" sec:authorize="isAuthenticated()">
+                  <ion-icon name="person-outline"></ion-icon> Profile
+                </a>
+                <a th:href="@{/about}">
+                  <ion-icon name="information-circle-outline"></ion-icon> About
+                  Us
+                </a>
+                <form
+                  th:action="@{/logout}"
+                  method="post"
+                  sec:authorize="isAuthenticated()"
+                >
+                  <button type="submit" class="dropdown-menu-button">
+                    <ion-icon name="log-out-outline"></ion-icon> Logout
+                  </button>
+                </form>
+                <a th:href="@{/login}" sec:authorize="!isAuthenticated()">
+                  <ion-icon name="log-in-outline"></ion-icon> Login
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Header with Centered Logo -->
+    <!-- Utility Bar with Cart and Wishlist -->
+
+    <main>
+      <header class="main-header">
+        <div class="header-logo">
+          <h1>
+            <ion-icon name="phone-portrait-outline"></ion-icon>
+            <span>Phone<span class="accent">Verse</span></span>
+          </h1>
+        </div>
+      </header>
+      <div class="banner">
+        <div class="container">
+          <div class="slider-container has-scrollbar">
+            <div class="slider-item">
+              <img
+                src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1480&auto=format&fit=crop"
+                alt="latest smartphones"
+                class="banner-img"
+              />
+              <div class="banner-content">
+                <p class="banner-subtitle">New Arrivals</p>
+                <h2 class="banner-title">Latest Flagship Smartphones</h2>
+                <p class="banner-text">
+                  Cutting-edge technology from &dollar; <b>399</b>.99+
+                </p>
+                <a href="#" class="banner-btn">Shop Collection</a>
+              </div>
+            </div>
+
+            <div class="slider-item">
+              <img
+                src="https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?q=80&w=1480&auto=format&fit=crop"
+                alt="premium headphones"
+                class="banner-img"
+              />
+              <div class="banner-content">
+                <p class="banner-subtitle">Premium Audio</p>
+                <h2 class="banner-title">Wireless Headphones & Earbuds</h2>
+                <p class="banner-text">
+                  Superior sound quality &dollar; <b>149</b>.99+
+                </p>
+                <a href="#" class="banner-btn">View All Audio</a>
+              </div>
+            </div>
+
+            <div class="slider-item">
+              <img
+                src="https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=1470&auto=format&fit=crop"
+                alt="tech accessories"
+                class="banner-img"
+              />
+              <div class="banner-content">
+                <p class="banner-subtitle">Tech Essentials</p>
+                <h2 class="banner-title">Accessories & Gadgets</h2>
+                <p class="banner-text">
+                  Complete your setup from &dollar; <b>29</b>.99
+                </p>
+                <a href="#" class="banner-btn">Shop Accessories</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="container">
+          <div class="category-item-container has-scrollbar">
+            <div class="category-item">
+              <div class="category-img-box">
+                <ion-icon
+                  name="phone-portrait-outline"
+                  style="color: var(--furnifind-primary)"
+                ></ion-icon>
+              </div>
+              <div class="category-content-box">
+                <div class="category-content-flex">
+                  <h3 class="category-item-title">Smartphones</h3>
+                  <p class="category-item-amount">(52)</p>
+                </div>
+                <a
+                  href="javascript:void(0);"
+                  class="category-btn"
+                  onclick="openCategoryModal('smartphone-devices'); return false;"
+                  data-category="smartphone-devices"
+                  >Show All</a
+                >
+              </div>
+            </div>
+
+            <div class="category-item">
+              <div class="category-img-box">
+                <ion-icon
+                  name="headset-outline"
+                  style="color: var(--furnifind-secondary)"
+                ></ion-icon>
+              </div>
+              <div class="category-content-box">
+                <div class="category-content-flex">
+                  <h3 class="category-item-title">Audio</h3>
+                  <p class="category-item-amount">(43)</p>
+                </div>
+                <a
+                  href="javascript:void(0);"
+                  class="category-btn"
+                  onclick="openCategoryModal('audio-devices'); return false;"
+                  data-category="audio-devices"
+                  >Show All</a
+                >
+              </div>
+            </div>
+
+            <div class="category-item">
+              <div class="category-img-box">
+                <ion-icon
+                  name="tablet-landscape-outline"
+                  style="color: var(--furnifind-accent)"
+                ></ion-icon>
+              </div>
+              <div class="category-content-box">
+                <div class="category-content-flex">
+                  <h3 class="category-item-title">Tablets</h3>
+                  <p class="category-item-amount">(28)</p>
+                </div>
+                <a
+                  href="javascript:void(0);"
+                  class="category-btn"
+                  onclick="openCategoryModal('tablet-devices'); return false;"
+                  data-category="tablet-devices"
+                  >Show All</a
+                >
+              </div>
+            </div>
+
+            <div class="category-item">
+              <div class="category-img-box">
+                <ion-icon
+                  name="hardware-chip-outline"
+                  style="color: var(--furnifind-dark)"
+                ></ion-icon>
+              </div>
+              <div class="category-content-box">
+                <div class="category-content-flex">
+                  <h3 class="category-item-title">Accessories</h3>
+                  <p class="category-item-amount">(67)</p>
+                </div>
+                <a
+                  href="javascript:void(0);"
+                  class="category-btn"
+                  onclick="openCategoryModal('tech-accessories'); return false;"
+                  data-category="tech-accessories"
+                  >Show All</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-container">
+        <div class="container">
+          <div class="product-box">
+            <div class="product-minimal">
+              <div class="product-showcase">
+                <h2 class="title">New Arrivals</h2>
+                <div class="showcase-wrapper has-scrollbar">
+                  <div class="showcase-container">
+                    <div class="showcase" th:id="'product-' + 101">
+                      <a th:href="@{/products/101}" class="showcase-img-box">
+                        <img
+                          th:src="@{https://images.unsplash.com/photo-1544228865-7d73678c0f28?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8OXw5NTI4MTEyfHxlbnwwfHx8fHw%3D}"
+                          alt="iPhone 15 Pro Titanium"
+                          class="showcase-img"
+                          width="70"
+                        />
+                      </a>
+                      <div class="showcase-content">
+                        <a th:href="@{/products/101}"
+                          ><h4 class="showcase-title">
+                            iPhone 15 Pro Titanium - 256GB
+                          </h4></a
+                        >
+                        <span class="showcase-category">Smartphones</span>
+                        <div class="price-box">
+                          <p class="price">$1,099.99</p>
+                          <del>$1,299.99</del>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="showcase" th:id="'product-' + 102">
+                      <a th:href="@{/products/102}" class="showcase-img-box">
+                        <img
+                          th:src="@{https://images.unsplash.com/photo-1679927006135-3ce598dac969?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MnwxMTQ5MzM2Nnx8ZW58MHx8fHx8}"
+                          alt="Samsung Galaxy S24 Ultra"
+                          class="showcase-img"
+                          width="70"
+                        />
+                      </a>
+                      <div class="showcase-content">
+                        <a th:href="@{/products/102}"
+                          ><h4 class="showcase-title">
+                            Samsung Galaxy S24 Ultra 5G
+                          </h4></a
+                        >
+                        <span class="showcase-category">Smartphones</span>
+                        <div class="price-box">
+                          <p class="price">$999.99</p>
+                          <del>$1,199.99</del>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="showcase" th:id="'product-' + 103">
+                      <a th:href="@{/products/103}" class="showcase-img-box">
+                        <img
+                          th:src="@{https://images.unsplash.com/photo-1549818353-17df3ef42850?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8NDh8MTE0OTMzNjZ8fGVufDB8fHx8fA%3D%3D}"
+                          alt="Google Pixel 8 Pro"
+                          class="showcase-img"
+                          width="70"
+                        />
+                      </a>
+                      <div class="showcase-content">
+                        <a th:href="@{/products/103}"
+                          ><h4 class="showcase-title">
+                            Google Pixel 8 Pro - 512GB
+                          </h4></a
+                        >
+                        <span class="showcase-category">Smartphones</span>
+                        <div class="price-box">
+                          <p class="price">$899.99</p>
+                          <del>$1,099.99</del>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="showcase" th:id="'product-' + 104">
+                      <a th:href="@{/products/104}" class="showcase-img-box">
+                        <img
+                          th:src="@{https://images.unsplash.com/photo-1585790050230-5dd28404ccb9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8NTF8MTE0OTMzNjZ8fGVufDB8fHx8fA%3D%3D}"
+                          alt="OnePlus 12"
+                          class="showcase-img"
+                          width="70"
+                        />
+                      </a>
+                      <div class="showcase-content">
+                        <a th:href="@{/products/104}"
+                          ><h4 class="showcase-title">
+                            OnePlus 12 - 16GB RAM 512GB
+                          </h4></a
+                        >
+                        <span class="showcase-category">Smartphones</span>
+                        <div class="price-box">
+                          <p class="price">$799.99</p>
+                          <del>$949.99</del>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="product-main">
+              <h2 class="title">Featured Products</h2>
+              <div class="product-grid">
+                <div class="showcase" th:id="'product-' + 201">
+                  <div class="showcase-banner">
+                    <img
+                      th:src="@{https://images.unsplash.com/photo-1609406316639-f7112845cbe0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MnwyNDc2NjgwfHxlbnwwfHx8fHw%3D}"
+                      alt="iPhone 15"
+                      class="product-img default"
+                      width="300"
+                    />
+                    <img
+                      th:src="@{https://images.unsplash.com/photo-1600692978168-f59e18a1cfbd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MnxycmEtdmhwMUpJb3x8ZW58MHx8fHx8}"
+                      alt="iPhone 15"
+                      class="product-img hover"
+                      width="300"
+                    />
+                    <p class="showcase-badge">15%</p>
+                    <div class="showcase-actions">
+                      <button
+                        class="btn-action"
+                        th:onclick="'addToWishlist(' + 201 + ')'"
+                      >
+                        <ion-icon name="heart-outline"></ion-icon>
+                      </button>
+                      <button
+                        class="btn-action"
+                        th:onclick="'quickView(' + 201 + ')'"
+                      >
+                        <ion-icon name="eye-outline"></ion-icon>
+                      </button>
+                      <button
+                        class="btn-action"
+                        th:onclick="'addToCart(' + 201 + ')'"
+                      >
+                        <ion-icon name="bag-add-outline"></ion-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="showcase-content">
+                    <span class="showcase-category">Smartphones</span>
+                    <a th:href="@{/products/201}"
+                      ><h3 class="showcase-title">iPhone 15 - 128GB</h3></a
+                    >
+                    <div class="showcase-rating">
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star-outline"></ion-icon>
+                    </div>
+                    <div class="price-box">
+                      <p class="price">$799.99</p>
+                      <del>$949.99</del>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="showcase" th:id="'product-' + 202">
+                  <div class="showcase-banner">
+                    <img
+                      th:src="@{https://images.unsplash.com/photo-1589555551611-6311ca7b5199?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MXxycmEtdmhwMUpJb3x8ZW58MHx8fHx8}"
+                      alt="Samsung Galaxy Z Flip 5"
+                      class="product-img default"
+                      width="300"
+                    />
+                    <img
+                      th:src="@{https://images.unsplash.com/photo-1609001732440-0d1768eb13b4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8NHxycmEtdmhwMUpJb3x8ZW58MHx8fHx8}"
+                      alt="Samsung Galaxy Z Flip 5"
+                      class="product-img hover"
+                      width="300"
+                    />
+                    <p class="showcase-badge angle black">Sale</p>
+                    <div class="showcase-actions">
+                      <button
+                        class="btn-action"
+                        th:onclick="'addToWishlist(' + 202 + ')'"
+                      >
+                        <ion-icon name="heart-outline"></ion-icon>
+                      </button>
+                      <button
+                        class="btn-action"
+                        th:onclick="'quickView(' + 202 + ')'"
+                      >
+                        <ion-icon name="eye-outline"></ion-icon>
+                      </button>
+                      <button
+                        class="btn-action"
+                        th:onclick="'addToCart(' + 202 + ')'"
+                      >
+                        <ion-icon name="bag-add-outline"></ion-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="showcase-content">
+                    <span class="showcase-category">Smartphones</span>
+                    <a th:href="@{/products/202}"
+                      ><h3 class="showcase-title">
+                        Samsung Galaxy Z Flip 5 - 256GB
+                      </h3></a
+                    >
+                    <div class="showcase-rating">
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star-outline"></ion-icon>
+                    </div>
+                    <div class="price-box">
+                      <p class="price">$899.99</p>
+                      <del>$1,099.99</del>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="showcase" th:id="'product-' + 203">
+                  <div class="showcase-banner">
+                    <img
+                      th:src="@{https://images.unsplash.com/photo-1600541519467-937869997e34?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8NnxycmEtdmhwMUpJb3x8ZW58MHx8fHx8}"
+                      alt="Google Pixel 7"
+                      class="product-img default"
+                      width="300"
+                    />
+                    <img
+                      th:src="@{https://images.unsplash.com/photo-1541096017664-085dd9a616c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MTd8cnJhLXZocDFKSW98fGVufDB8fHx8fA%3D%3D}"
+                      alt="Google Pixel 7"
+                      class="product-img hover"
+                      width="300"
+                    />
+                    <p class="showcase-badge angle pink">SALE</p>
+                    <div class="showcase-actions">
+                      <button
+                        class="btn-action"
+                        th:onclick="'addToWishlist(' + 203 + ')'"
+                      >
+                        <ion-icon name="heart-outline"></ion-icon>
+                      </button>
+                      <button
+                        class="btn-action"
+                        th:onclick="'quickView(' + 203 + ')'"
+                      >
+                        <ion-icon name="eye-outline"></ion-icon>
+                      </button>
+                      <button
+                        class="btn-action"
+                        th:onclick="'addToCart(' + 203 + ')'"
+                      >
+                        <ion-icon name="bag-add-outline"></ion-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="showcase-content">
+                    <span class="showcase-category">Smartphones</span>
+                    <a th:href="@{/products/203}"
+                      ><h3 class="showcase-title">Google Pixel 7 - 128GB</h3></a
+                    >
+                    <div class="showcase-rating">
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star-half-outline"></ion-icon>
+                    </div>
+                    <div class="price-box">
+                      <p class="price">$499.99</p>
+                      <del>$649.99</del>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="showcase" th:id="'product-' + 204">
+                  <div class="showcase-banner">
+                    <img
+                      th:src="@{https://images.unsplash.com/photo-1617689181034-e79239074c13?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MjJ8cnJhLXZocDFKSW98fGVufDB8fHx8fA%3D%3D}"
+                      alt="Xiaomi 13 Pro"
+                      class="product-img default"
+                      width="300"
+                    />
+                    <img
+                      th:src="@{https://images.unsplash.com/photo-1625383659159-e5bb894a73d4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MzR8cnJhLXZocDFKSW98fGVufDB8fHx8fA%3D%3D}"
+                      alt="Xiaomi 13 Pro"
+                      class="product-img hover"
+                      width="300"
+                    />
+                    <div class="showcase-actions">
+                      <button
+                        class="btn-action"
+                        th:onclick="'addToWishlist(' + 204 + ')'"
+                      >
+                        <ion-icon name="heart-outline"></ion-icon>
+                      </button>
+                      <button
+                        class="btn-action"
+                        th:onclick="'quickView(' + 204 + ')'"
+                      >
+                        <ion-icon name="eye-outline"></ion-icon>
+                      </button>
+                      <button
+                        class="btn-action"
+                        th:onclick="'addToCart(' + 204 + ')'"
+                      >
+                        <ion-icon name="bag-add-outline"></ion-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="showcase-content">
+                    <span class="showcase-category">Smartphones</span>
+                    <a th:href="@{/products/204}"
+                      ><h3 class="showcase-title">Xiaomi 13 Pro - 256GB</h3></a
+                    >
+                    <div class="showcase-rating">
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                    </div>
+                    <div class="price-box">
+                      <p class="price">$699.99</p>
+                      <del>$899.99</del>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="showcase" th:id="'product-' + 205">
+                  <div class="showcase-banner">
+                    <img
+                      th:src="@{https://images.unsplash.com/photo-1659080382102-176e51b4f5f4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z29vZ2xlJTIwcGl4ZWxzfGVufDB8fDB8fHww}"
+                      alt="Google Pixel 7a"
+                      class="product-img default"
+                      width="300"
+                    />
+                    <img
+                      th:src="@{https://images.unsplash.com/photo-1688529175497-3aa8010abf3b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGdvb2dsZSUyMHBpeGVsc3xlbnwwfHwwfHx8MA%3D%3D}"
+                      alt="Google Pixel 7a"
+                      class="product-img hover"
+                      width="300"
+                    />
+                    <p class="showcase-badge">20%</p>
+                    <div class="showcase-actions">
+                      <button
+                        class="btn-action"
+                        th:onclick="'addToWishlist(' + 205 + ')'"
+                      >
+                        <ion-icon name="heart-outline"></ion-icon>
+                      </button>
+                      <button
+                        class="btn-action"
+                        th:onclick="'quickView(' + 205 + ')'"
+                      >
+                        <ion-icon name="eye-outline"></ion-icon>
+                      </button>
+                      <button
+                        class="btn-action"
+                        th:onclick="'addToCart(' + 205 + ')'"
+                      >
+                        <ion-icon name="bag-add-outline"></ion-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="showcase-content">
+                    <span class="showcase-category">Smartphones</span>
+                    <a th:href="@{/products/205}"
+                      ><h3 class="showcase-title">
+                        Google Pixel 7a - 128GB
+                      </h3></a
+                    >
+                    <div class="showcase-rating">
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star-half-outline"></ion-icon>
+                    </div>
+                    <div class="price-box">
+                      <p class="price">$379.99</p>
+                      <del>$479.99</del>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="showcase" th:id="'product-' + 206">
+                  <div class="showcase-banner">
+                    <img
+                      th:src="@{https://images.unsplash.com/photo-1724322535079-11b08f7f5c88?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fGdvb2dsZSUyMHBpeGVsc3xlbnwwfHwwfHx8MA%3D%3D}"
+                      alt="Samsung Galaxy S23"
+                      class="product-img default"
+                      width="300"
+                    />
+                    <img
+                      th:src="@{https://images.unsplash.com/photo-1669888940542-bf597f76ef39?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzh8fGdvb2dsZSUyMHBpeGVsc3xlbnwwfHwwfHx8MA%3D%3D}"
+                      alt="Samsung Galaxy S23"
+                      class="product-img hover"
+                      width="300"
+                    />
+                    <div class="showcase-actions">
+                      <button
+                        class="btn-action"
+                        th:onclick="'addToWishlist(' + 206 + ')'"
+                      >
+                        <ion-icon name="heart-outline"></ion-icon>
+                      </button>
+                      <button
+                        class="btn-action"
+                        th:onclick="'quickView(' + 206 + ')'"
+                      >
+                        <ion-icon name="eye-outline"></ion-icon>
+                      </button>
+                      <button
+                        class="btn-action"
+                        th:onclick="'addToCart(' + 206 + ')'"
+                      >
+                        <ion-icon name="bag-add-outline"></ion-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="showcase-content">
+                    <span class="showcase-category">Smartphones</span>
+                    <a th:href="@{/products/206}"
+                      ><h3 class="showcase-title">
+                        Samsung Galaxy S23 - 256GB
+                      </h3></a
+                    >
+                    <div class="showcase-rating">
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star-outline"></ion-icon>
+                    </div>
+                    <div class="price-box">
+                      <p class="price">$649.99</p>
+                      <del>$799.99</del>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="container">
+          <div class="testimonials-box">
+            <div class="testimonial">
+              <h2 class="title">Customer Reviews</h2>
+              <div class="testimonial-card">
+                <h3 class="testimonial-name">Alex Rodriguez</h3>
+                <p class="testimonial-title">Tech Enthusiast</p>
+                <img
+                  src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/icons/quote.svg"
+                  alt="quotation"
+                  class="quotation-img"
+                  width="30"
+                />
+                <p class="testimonial-desc">
+                  "PhoneVerse has completely transformed my tech shopping
+                  experience. Their selection of smartphones is incredible, and
+                  I found the perfect iPhone 15 Pro Max at an unbeatable price.
+                  Fast shipping and excellent customer service!"
+                </p>
+              </div>
+
+              <div class="testimonial-card" style="margin-top: 20px">
+                <h3 class="testimonial-name">Sarah Chen</h3>
+                <p class="testimonial-title">Mobile Content Creator</p>
+                <img
+                  src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/icons/quote.svg"
+                  alt="quotation"
+                  class="quotation-img"
+                  width="30"
+                />
+                <p class="testimonial-desc">
+                  "As a content creator, I need reliable tech gear. PhoneVerse
+                  consistently delivers premium devices and accessories. Their
+                  wireless headphones and charging solutions are top-notch and
+                  arrive quickly!"
+                </p>
+              </div>
+            </div>
+
+            <div class="service">
+              <h2 class="title">PhoneVerse Benefits</h2>
+              <div class="service-container">
+                <div class="service-item">
+                  <div class="service-icon">
+                    <ion-icon name="shield-checkmark-outline"></ion-icon>
+                  </div>
+                  <div class="service-content">
+                    <h3 class="service-title">Authentic Products</h3>
+                    <p class="service-desc">
+                      Genuine devices from authorized retailers only.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="service-item">
+                  <div class="service-icon">
+                    <ion-icon name="flash-outline"></ion-icon>
+                  </div>
+                  <div class="service-content">
+                    <h3 class="service-title">Fast Delivery</h3>
+                    <p class="service-desc">
+                      Same-day delivery available in select cities.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="service-item">
+                  <div class="service-icon">
+                    <ion-icon name="gift-outline"></ion-icon>
+                  </div>
+                  <div class="service-content">
+                    <h3 class="service-title">Rewards Program</h3>
+                    <p class="service-desc">
+                      Earn points with every purchase for exclusive deals.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="service-item">
+                  <div class="service-icon">
+                    <ion-icon name="build-outline"></ion-icon>
+                  </div>
+                  <div class="service-content">
+                    <h3 class="service-title">Tech Support</h3>
+                    <p class="service-desc">
+                      Expert setup assistance and troubleshooting.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="quote-section">
+          <div class="container">
+            <div class="literary-quote">
+              "Technology is best when it brings people together."
+              <div class="quote-author">― Matt Mullenweg</div>
+            </div>
+          </div>
+        </div>
+        <footer>
+          <div class="footer-bottom">
+            <div class="container">
+              <img
+                src="https://i.postimg.cc/43GKnVFF/payment.png"
+                alt="payment method"
+                class="payment-img"
+              />
+              <p class="copyright">
+                Copyright &copy; <a href="#">PhoneVerse</a> all rights reserved
+              </p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </main>
+    <!-- Category Modals -->
+    <div id="smartphone-devices-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="modal-header">
+          <h2>Smartphones</h2>
+        </div>
+        <div class="modal-products">
+          <!-- Smartphone Product 1 -->
+          <div class="showcase" th:id="'product-' + 301">
+            <div class="showcase-banner">
+              <img
+                th:src="@{https://images.unsplash.com/photo-1605236453806-b25e46c7c2e8?q=80&w=1364&auto=format&fit=crop}"
+                alt="OnePlus 12 Pro"
+                class="product-img default"
+                width="300"
+              />
+              <img
+                th:src="@{https://images.unsplash.com/photo-1607853202273-797f1c22a38e?q=80&w=1374&auto=format&fit=crop}"
+                alt="OnePlus 12 Pro"
+                class="product-img hover"
+                width="300"
+              />
+              <p class="showcase-badge">New</p>
+              <div class="showcase-actions">
+                <button
+                  class="btn-action"
+                  th:onclick="'addToWishlist(' + 301 + ')'"
+                >
+                  <ion-icon name="heart-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'quickView(' + 301 + ')'"
+                >
+                  <ion-icon name="eye-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'addToCart(' + 301 + ')'"
+                >
+                  <ion-icon name="bag-add-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+            <div class="showcase-content">
+              <span class="showcase-category">Smartphones</span>
+              <a th:href="@{/products/301}">
+                <h3 class="showcase-title">OnePlus 12 Pro 256GB Silky Black</h3>
+              </a>
+              <div class="showcase-rating">
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star-half-outline"></ion-icon>
+              </div>
+              <div class="price-box">
+                <p class="price">$799.99</p>
+                <del>$899.99</del>
+              </div>
+            </div>
+          </div>
+
+          <!-- Smartphone Product 2 -->
+          <div class="showcase" th:id="'product-' + 302">
+            <div class="showcase-banner">
+              <img
+                th:src="@{https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?q=80&w=1365&auto=format&fit=crop}"
+                alt="Xiaomi 14 Ultra"
+                class="product-img default"
+                width="300"
+              />
+              <img
+                th:src="@{https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1480&auto=format&fit=crop}"
+                alt="Xiaomi 14 Ultra"
+                class="product-img hover"
+                width="300"
+              />
+              <p class="showcase-badge angle black">Sale</p>
+              <div class="showcase-actions">
+                <button
+                  class="btn-action"
+                  th:onclick="'addToWishlist(' + 302 + ')'"
+                >
+                  <ion-icon name="heart-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'quickView(' + 302 + ')'"
+                >
+                  <ion-icon name="eye-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'addToCart(' + 302 + ')'"
+                >
+                  <ion-icon name="bag-add-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+            <div class="showcase-content">
+              <span class="showcase-category">Smartphones</span>
+              <a th:href="@{/products/302}">
+                <h3 class="showcase-title">
+                  Xiaomi 14 Ultra 512GB Photography Edition
+                </h3>
+              </a>
+              <div class="showcase-rating">
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star-outline"></ion-icon>
+              </div>
+              <div class="price-box">
+                <p class="price">$649.99</p>
+                <del>$799.99</del>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-pagination"></div>
+      </div>
+    </div>
+
+    <div id="audio-devices-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="modal-header">
+          <h2>Audio Devices</h2>
+        </div>
+        <div class="modal-products">
+          <!-- Audio Product 1 -->
+          <div class="showcase" th:id="'product-' + 401">
+            <div class="showcase-banner">
+              <img
+                th:src="@{https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1470&auto=format&fit=crop}"
+                alt="Bose QuietComfort 45"
+                class="product-img default"
+                width="300"
+              />
+              <img
+                th:src="@{https://images.unsplash.com/photo-1484704849700-f032a568e944?q=80&w=1470&auto=format&fit=crop}"
+                alt="Bose QuietComfort 45"
+                class="product-img hover"
+                width="300"
+              />
+              <p class="showcase-badge">25%</p>
+              <div class="showcase-actions">
+                <button
+                  class="btn-action"
+                  th:onclick="'addToWishlist(' + 401 + ')'"
+                >
+                  <ion-icon name="heart-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'quickView(' + 401 + ')'"
+                >
+                  <ion-icon name="eye-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'addToCart(' + 401 + ')'"
+                >
+                  <ion-icon name="bag-add-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+            <div class="showcase-content">
+              <span class="showcase-category">Audio</span>
+              <a th:href="@{/products/401}">
+                <h3 class="showcase-title">
+                  Bose QuietComfort 45 Noise Cancelling
+                </h3>
+              </a>
+              <div class="showcase-rating">
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+              </div>
+              <div class="price-box">
+                <p class="price">$249.99</p>
+                <del>$329.99</del>
+              </div>
+            </div>
+          </div>
+
+          <!-- Audio Product 2 -->
+          <div class="showcase" th:id="'product-' + 402">
+            <div class="showcase-banner">
+              <img
+                th:src="@{https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=1632&auto=format&fit=crop}"
+                alt="JBL Charge 5 Speaker"
+                class="product-img default"
+                width="300"
+              />
+              <img
+                th:src="@{https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?q=80&w=1470&auto=format&fit=crop}"
+                alt="JBL Charge 5 Speaker"
+                class="product-img hover"
+                width="300"
+              />
+              <p class="showcase-badge angle black">Best Seller</p>
+              <div class="showcase-actions">
+                <button
+                  class="btn-action"
+                  th:onclick="'addToWishlist(' + 402 + ')'"
+                >
+                  <ion-icon name="heart-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'quickView(' + 402 + ')'"
+                >
+                  <ion-icon name="eye-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'addToCart(' + 402 + ')'"
+                >
+                  <ion-icon name="bag-add-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+            <div class="showcase-content">
+              <span class="showcase-category">Audio</span>
+              <a th:href="@{/products/402}">
+                <h3 class="showcase-title">JBL Charge 5 Portable Speaker</h3>
+              </a>
+              <div class="showcase-rating">
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star-half-outline"></ion-icon>
+              </div>
+              <div class="price-box">
+                <p class="price">$149.99</p>
+                <del>$179.99</del>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-pagination"></div>
+      </div>
+    </div>
+
+    <div id="tablet-devices-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="modal-header">
+          <h2>Tablet Devices</h2>
+        </div>
+        <div class="modal-products">
+          <!-- Tablet Product 1 -->
+          <div class="showcase" th:id="'product-' + 501">
+            <div class="showcase-banner">
+              <img
+                th:src="@{https://images.unsplash.com/photo-1544117519-31a4b719223d?q=80&w=1470&auto=format&fit=crop}"
+                alt="Samsung Galaxy Tab S9 Ultra"
+                class="product-img default"
+                width="300"
+              />
+              <img
+                th:src="@{https://images.unsplash.com/photo-1561154464-82e9adf32764?q=80&w=1470&auto=format&fit=crop}"
+                alt="Samsung Galaxy Tab S9 Ultra"
+                class="product-img hover"
+                width="300"
+              />
+              <p class="showcase-badge">Trending</p>
+              <div class="showcase-actions">
+                <button
+                  class="btn-action"
+                  th:onclick="'addToWishlist(' + 501 + ')'"
+                >
+                  <ion-icon name="heart-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'quickView(' + 501 + ')'"
+                >
+                  <ion-icon name="eye-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'addToCart(' + 501 + ')'"
+                >
+                  <ion-icon name="bag-add-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+            <div class="showcase-content">
+              <span class="showcase-category">Tablets</span>
+              <a th:href="@{/products/501}">
+                <h3 class="showcase-title">Samsung Galaxy Tab S9 Ultra 5G</h3>
+              </a>
+              <div class="showcase-rating">
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star-outline"></ion-icon>
+              </div>
+              <div class="price-box">
+                <p class="price">$1,099.99</p>
+                <del>$1,299.99</del>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tablet Product 2 -->
+          <div class="showcase" th:id="'product-' + 502">
+            <div class="showcase-banner">
+              <img
+                th:src="@{https://images.unsplash.com/photo-1611532736492-de6d4b790f9d?q=80&w=1374&auto=format&fit=crop}"
+                alt="Microsoft Surface Pro 9"
+                class="product-img default"
+                width="300"
+              />
+              <img
+                th:src="@{https://images.unsplash.com/photo-1587614387466-0a72ca909e16?q=80&w=1470&auto=format&fit=crop}"
+                alt="Microsoft Surface Pro 9"
+                class="product-img hover"
+                width="300"
+              />
+              <p class="showcase-badge angle black">Hot Deal</p>
+              <div class="showcase-actions">
+                <button
+                  class="btn-action"
+                  th:onclick="'addToWishlist(' + 502 + ')'"
+                >
+                  <ion-icon name="heart-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'quickView(' + 502 + ')'"
+                >
+                  <ion-icon name="eye-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'addToCart(' + 502 + ')'"
+                >
+                  <ion-icon name="bag-add-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+            <div class="showcase-content">
+              <span class="showcase-category">Tablets</span>
+              <a th:href="@{/products/502}">
+                <h3 class="showcase-title">Microsoft Surface Pro 9 Intel i7</h3>
+              </a>
+              <div class="showcase-rating">
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+              </div>
+              <div class="price-box">
+                <p class="price">$899.99</p>
+                <del>$1,099.99</del>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-pagination"></div>
+      </div>
+    </div>
+
+    <div id="tech-accessories-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="modal-header">
+          <h2>Tech Accessories</h2>
+        </div>
+        <div class="modal-products">
+          <!-- Accessory Product 1 -->
+          <div class="showcase" th:id="'product-' + 601">
+            <div class="showcase-banner">
+              <img
+                th:src="@{https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=1470&auto=format&fit=crop}"
+                alt="MagSafe Wireless Charger"
+                class="product-img default"
+                width="300"
+              />
+              <img
+                th:src="@{https://images.unsplash.com/photo-1573883430485-b4e3d0aaeeac?q=80&w=1470&auto=format&fit=crop}"
+                alt="MagSafe Wireless Charger"
+                class="product-img hover"
+                width="300"
+              />
+              <p class="showcase-badge">New Arrival</p>
+              <div class="showcase-actions">
+                <button
+                  class="btn-action"
+                  th:onclick="'addToWishlist(' + 601 + ')'"
+                >
+                  <ion-icon name="heart-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'quickView(' + 601 + ')'"
+                >
+                  <ion-icon name="eye-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'addToCart(' + 601 + ')'"
+                >
+                  <ion-icon name="bag-add-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+            <div class="showcase-content">
+              <span class="showcase-category">Accessories</span>
+              <a th:href="@{/products/601}">
+                <h3 class="showcase-title">MagSafe Wireless Charger 15W</h3>
+              </a>
+              <div class="showcase-rating">
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star-half-outline"></ion-icon>
+              </div>
+              <div class="price-box">
+                <p class="price">$39.99</p>
+                <del>$49.99</del>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accessory Product 2 -->
+          <div class="showcase" th:id="'product-' + 602">
+            <div class="showcase-banner">
+              <img
+                th:src="@{https://images.unsplash.com/photo-1609592424306-dd2100b0d8a0?q=80&w=1460&auto=format&fit=crop}"
+                alt="USB-C Power Bank"
+                class="product-img default"
+                width="300"
+              />
+              <img
+                th:src="@{https://images.unsplash.com/photo-1619640492700-e02e6aaad1d5?q=80&w=1469&auto=format&fit=crop}"
+                alt="USB-C Power Bank"
+                class="product-img hover"
+                width="300"
+              />
+              <p class="showcase-badge angle black">Best Seller</p>
+              <div class="showcase-actions">
+                <button
+                  class="btn-action"
+                  th:onclick="'addToWishlist(' + 602 + ')'"
+                >
+                  <ion-icon name="heart-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'quickView(' + 602 + ')'"
+                >
+                  <ion-icon name="eye-outline"></ion-icon>
+                </button>
+                <button
+                  class="btn-action"
+                  th:onclick="'addToCart(' + 602 + ')'"
+                >
+                  <ion-icon name="bag-add-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+            <div class="showcase-content">
+              <span class="showcase-category">Accessories</span>
+              <a th:href="@{/products/602}">
+                <h3 class="showcase-title">
+                  Anker 20000mAh Power Bank USB-C PD
+                </h3>
+              </a>
+              <div class="showcase-rating">
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star"></ion-icon>
+                <ion-icon name="star-outline"></ion-icon>
+              </div>
+              <div class="price-box">
+                <p class="price">$59.99</p>
+                <del>$79.99</del>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-pagination"></div>
+      </div>
+    </div>
+    <!-- Toast notification container -->
+    <div class="toast-container"></div>
+
+    <!-- Mobile Menu Dropdown Script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Mobile Menu Dropdown Toggle
+        const mobileMenuDropdownBtn = document.querySelector(
+          ".mobile-menu-dropdown-btn"
+        );
+        const mobileMenuDropdown = document.querySelector(
+          ".mobile-menu-dropdown"
+        );
+
+        if (mobileMenuDropdownBtn && mobileMenuDropdown) {
+          mobileMenuDropdownBtn.addEventListener("click", function (event) {
+            event.stopPropagation(); // Prevent event bubbling
+            mobileMenuDropdown.classList.toggle("active");
+          });
+
+          // Close dropdown when clicking outside
+          document.addEventListener("click", function (event) {
+            if (!event.target.closest(".mobile-menu-dropdown")) {
+              mobileMenuDropdown.classList.remove("active");
+            }
+          });
+        }
+
+        // Sidebar Toggle Functionality
+        const sidebarToggle = document.getElementById("sidebar-toggle");
+        const sidebar = document.querySelector(".sidebar");
+        const main = document.querySelector("main");
+
+        if (sidebarToggle && sidebar && main) {
+          sidebarToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("sidebar-hidden");
+            main.classList.toggle("main-expanded");
+
+            // Update aria attributes for accessibility
+            const isHidden = sidebar.classList.contains("sidebar-hidden");
+            sidebarToggle.setAttribute("aria-expanded", !isHidden);
+            sidebar.setAttribute("aria-hidden", isHidden);
+          });
+
+          // Hide sidebar on small screens by default
+          const handleResize = () => {
+            if (window.innerWidth < 768) {
+              sidebar.classList.add("sidebar-hidden");
+              main.classList.add("main-expanded");
+            } else {
+              sidebar.classList.remove("sidebar-hidden");
+              main.classList.remove("main-expanded");
+            }
+          };
+
+          // Run on page load and on resize
+          handleResize();
+          window.addEventListener("resize", handleResize);
+        }
+      });
+    </script>
+
+    <!-- Custom JavaScript for cart functionality -->
+    <script th:inline="javascript">
+      // Load cart count on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        // First try to get counts from localStorage for immediate display
+        const savedCartCount = localStorage.getItem("cartCount");
+        if (savedCartCount) {
+          updateCartCount(parseInt(savedCartCount));
+        }
+
+        const savedWishlistCount = localStorage.getItem("wishlistCount");
+        if (savedWishlistCount) {
+          updateWishlistCount(parseInt(savedWishlistCount));
+        }
+
+        // Then fetch the actual counts from the server
+        loadCartCount();
+        loadWishlistCount();
+
+        // Add cart hover functionality
+        const cartBtn = document.querySelector(".cart-btn");
+        if (cartBtn) {
+          cartBtn.addEventListener("mouseenter", loadMiniCartPreview);
+        }
+
+        // Add wishlist hover functionality
+        const wishlistBtn = document.querySelector(".wishlist-btn");
+        if (wishlistBtn) {
+          wishlistBtn.addEventListener("mouseenter", loadMiniWishlistPreview);
+        }
+      });
+
+      // Function to load mini cart preview content
+      function loadMiniCartPreview() {
+        const miniCartItems = document.querySelector(".mini-cart-items");
+        if (!miniCartItems) return;
+
+        // Check if we already loaded this recently (cache for 1 minute)
+        const lastLoad = localStorage.getItem("miniCartLastLoad");
+        const now = Date.now();
+        if (
+          lastLoad &&
+          now - parseInt(lastLoad) < 60000 &&
+          localStorage.getItem("miniCartHtml")
+        ) {
+          miniCartItems.innerHTML = localStorage.getItem("miniCartHtml");
+          return;
+        }
+
+        // Show loading
+        miniCartItems.innerHTML =
+          '<div class="mini-cart-loading">Loading cart items...</div>';
+
+        // Fetch cart items
+        fetch("/cart/mini")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to load cart");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.items && data.items.length > 0) {
+              // Cart has items
+              let html = "";
+              data.items.forEach((item) => {
+                const productName =
+                  item.name && item.name !== "null"
+                    ? item.name
+                    : "Loading product name...";
+                html += `
+                  <div class="mini-cart-item">
+                    <img src="${item.image}" alt="${productName}" class="mini-cart-item-img">
+                    <div class="mini-cart-item-details">
+                      <h5 class="mini-cart-item-title" data-product-id="${item.id}">${productName}</h5>
+                      <p class="mini-cart-item-price">${item.price}</p>
+                      <span class="mini-cart-item-qty">Qty: ${item.quantity}</span>
+                    </div>
+                    <button class="mini-cart-item-remove" onclick="removeFromCart(${item.id})">×</button>
+                  </div>
+                `;
+              });
+
+              // Add subtotal
+              html += `
+                <div class="mini-cart-subtotal">
+                  <span>Subtotal:</span>
+                  <strong>${data.subtotal}</strong>
+                </div>
+              `;
+
+              miniCartItems.innerHTML = html;
+
+              // Cache the result
+              localStorage.setItem("miniCartHtml", html);
+              localStorage.setItem("miniCartLastLoad", now.toString());
+
+              // Fetch missing product names
+              setTimeout(fetchMiniCartProductNames, 100);
+            } else {
+              // Cart is empty
+              miniCartItems.innerHTML =
+                '<div class="mini-cart-empty">Your cart is empty</div>';
+              localStorage.setItem("miniCartHtml", miniCartItems.innerHTML);
+              localStorage.setItem("miniCartLastLoad", now.toString());
+            }
+          })
+          .catch((error) => {
+            miniCartItems.innerHTML =
+              '<div class="mini-cart-error">Failed to load cart items</div>';
+          });
+      }
+
+      // Function to remove item from cart
+      function removeFromCart(productId) {
+        fetch("/cart/remove", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document
+              .querySelector('meta[name="_csrf"]')
+              ?.getAttribute("content"),
+          },
+          body: JSON.stringify({ productId }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            updateCartCount(data.cartCount || 0);
+            showToast("Success", "Item removed from cart", "success");
+
+            // Clear cache and reload mini cart
+            localStorage.removeItem("miniCartHtml");
+            localStorage.removeItem("miniCartLastLoad");
+            loadMiniCartPreview();
+          })
+          .catch((error) => {
+            showToast("Error", "Failed to remove item from cart", "error");
+          });
+      }
+
+      // Function to load the cart count
+      function loadCartCount() {
+        fetch("/cart/count")
+          .then((response) => response.json())
+          .then((data) => {
+            updateCartCount(data.cartCount || 0);
+          })
+          .catch((error) => {
+            // Silently handle errors in production
+            const savedCount = localStorage.getItem("cartCount");
+            if (savedCount) {
+              updateCartCount(parseInt(savedCount));
+            }
+          });
+      }
+
+      // Function to load wishlist count from server
+      function loadWishlistCount() {
+        fetch("/wishlist/count")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            updateWishlistCount(data.wishlistCount || 0);
+          })
+          .catch((error) => {
+            console.error("Error fetching wishlist count:", error);
+            // If fetch fails, at least try to use the localStorage value
+            const savedCount = localStorage.getItem("wishlistCount");
+            if (savedCount) {
+              updateWishlistCount(parseInt(savedCount));
+            }
+          });
+      }
+
+      // Cart functionality
+      function addToCart(productId) {
+        // Add product to cart using AJAX
+        fetch("/cart/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document
+              .querySelector('meta[name="_csrf"]')
+              ?.getAttribute("content"),
+          },
+          body: JSON.stringify({ productId: productId, quantity: 1 }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.redirect) {
+              // Redirect if needed (e.g., to login page)
+              window.location.href = data.redirect;
+              return;
+            }
+
+            showToast("Success", "Product added to cart!", "success");
+            // Use the cartCount from the server response
+            if (data.cartCount !== undefined) {
+              updateCartCount(data.cartCount);
+            }
+          })
+          .catch((error) => {
+            showToast(
+              "Error",
+              "Failed to add product to cart. Please try again.",
+              "error"
+            );
+          });
+      }
+
+      // Wishlist functionality
+      function addToWishlist(productId) {
+        // Add product to wishlist using AJAX
+        fetch("/wishlist/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document
+              .querySelector('meta[name="_csrf"]')
+              ?.getAttribute("content"),
+          },
+          body: JSON.stringify({ productId: productId }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.redirect) {
+              // Redirect if needed (e.g., to login page)
+              window.location.href = data.redirect;
+              return;
+            }
+
+            showToast("Success", "Product added to wishlist!", "success");
+            // Use the wishlistCount from the server response
+            if (data.wishlistCount !== undefined) {
+              updateWishlistCount(data.wishlistCount);
+            }
+
+            // Clear cache to ensure fresh wishlist data
+            localStorage.removeItem("miniWishlistHtml");
+            localStorage.removeItem("miniWishlistLastLoad");
+          })
+          .catch((error) => {
+            showToast(
+              "Error",
+              "Failed to add product to wishlist. Please try again.",
+              "error"
+            );
+            console.error("Error:", error);
+          });
+      }
+
+      // Quick view functionality
+      function quickView(productId) {
+        // Show product details page
+        // You can implement a modal popup to show product details
+        window.location.href = "/products/" + productId;
+      }
+
+      // Update cart count in UI
+      function updateCartCount(count) {
+        const countElements = document.querySelectorAll(".count");
+        const previousCount = parseInt(
+          localStorage.getItem("cartCount") || "0"
+        );
+        const isIncreasing = count > previousCount;
+
+        // Find all cart badges (both in header and mobile navigation)
+        countElements.forEach((element) => {
+          const parentButton = element.closest(".action-btn");
+          if (
+            parentButton &&
+            parentButton.querySelector('ion-icon[name="bag-handle-outline"]')
+          ) {
+            // Update the text
+            element.textContent = count;
+
+            // Apply animation
+            if (isIncreasing) {
+              element.style.animation = "none";
+              void element.offsetWidth; // Trigger reflow
+              element.style.animation = "cartBadgePulse 1s ease-out";
+
+              // Also animate the cart icon
+              const cartIcon = parentButton.querySelector(
+                'ion-icon[name="bag-handle-outline"]'
+              );
+              if (cartIcon) {
+                cartIcon.style.animation = "none";
+                void cartIcon.offsetWidth;
+                cartIcon.style.animation = "addToCartAnimation 0.5s ease-out";
+              }
+            }
+
+            // Always show the badge, even when count is 0
+            element.style.display = "flex";
+
+            // Adjust size based on count
+            if (count > 9) {
+              element.style.width = "24px";
+            } else {
+              element.style.width = "22px";
+            }
+          }
+        });
+
+        // Store the cart count in localStorage for persistence
+        localStorage.setItem("cartCount", count);
+
+        // Update the cart tooltip if count changes
+        updateCartTooltip(count);
+      }
+
+      // Update wishlist count in UI
+      function updateWishlistCount(count) {
+        const countElements = document.querySelectorAll(".count");
+        const previousCount = parseInt(
+          localStorage.getItem("wishlistCount") || "0"
+        );
+        const isIncreasing = count > previousCount;
+
+        // Find wishlist badges (both in header and mobile navigation)
+        countElements.forEach((element) => {
+          const parentButton = element.closest(".action-btn");
+          if (
+            parentButton &&
+            parentButton.querySelector('ion-icon[name="heart-outline"]')
+          ) {
+            // Update the text
+            element.textContent = count;
+
+            // Apply animation
+            if (isIncreasing) {
+              element.style.animation = "none";
+              void element.offsetWidth; // Trigger reflow
+              element.style.animation = "cartBadgePulse 1s ease-out";
+
+              // Also animate the wishlist icon
+              const wishlistIcon = parentButton.querySelector(
+                'ion-icon[name="heart-outline"]'
+              );
+              if (wishlistIcon) {
+                wishlistIcon.style.animation = "none";
+                void wishlistIcon.offsetWidth; // Trigger reflow
+                wishlistIcon.style.animation =
+                  "addToCartAnimation 0.5s ease-out";
+              }
+            }
+          }
+        });
+
+        // Store in local storage for persistence
+        localStorage.setItem("wishlistCount", count);
+
+        // Update the wishlist tooltip if count changes
+        updateWishlistTooltip(count);
+      }
+
+      // Update cart tooltip text based on item count
+      function updateCartTooltip(count) {
+        const tooltips = document.querySelectorAll(".cart-tooltip");
+        tooltips.forEach((tooltip) => {
+          if (count === 0) {
+            tooltip.textContent = "Cart Empty";
+          } else if (count === 1) {
+            tooltip.textContent = "View Cart (1 item)";
+          } else {
+            tooltip.textContent = `View Cart (${count} items)`;
+          }
+        });
+      }
+
+      // Update wishlist tooltip text based on item count
+      function updateWishlistTooltip(count) {
+        const tooltips = document.querySelectorAll(".wishlist-tooltip");
+        tooltips.forEach((tooltip) => {
+          if (count === 0) {
+            tooltip.textContent = "Wishlist Empty";
+          } else if (count === 1) {
+            tooltip.textContent = "View Wishlist (1 item)";
+          } else {
+            tooltip.textContent = `View Wishlist (${count} items)`;
+          }
+        });
+      }
+
+      // Show toast notification
+      function showToast(title, message, type = "success") {
+        const toastContainer = document.querySelector(".toast-container");
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+
+        const toastContent = `
+          <div class="toast-icon">
+            <ion-icon name="${
+              type === "success" ? "checkmark-circle" : "alert-circle"
+            }"></ion-icon>
+          </div>
+          <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+          </div>
+          <button class="toast-close" onclick="this.parentElement.remove()">
+            <ion-icon name="close"></ion-icon>
+          </button>
+        `;
+
+        toast.innerHTML = toastContent;
+        toastContainer.appendChild(toast);
+
+        // Auto remove toast after 3 seconds
+        setTimeout(() => {
+          toast.style.opacity = "0";
+          setTimeout(() => {
+            toast.remove();
+          }, 300);
+        }, 3000);
+      }
+
+      // Function to fetch missing product names in mini cart
+      function fetchMiniCartProductNames() {
+        const productNameElements = document.querySelectorAll(
+          ".mini-cart-item-title"
+        );
+
+        productNameElements.forEach((element) => {
+          if (element.textContent.trim() === "Loading product name...") {
+            const productId = element.getAttribute("data-product-id");
+
+            if (productId) {
+              fetch(`/api/products/${productId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.success && data.data && data.data.name) {
+                    element.textContent = data.data.name;
+                    // Update the cached HTML in localStorage
+                    localStorage.setItem(
+                      "miniCartHtml",
+                      document.querySelector(".mini-cart-items").innerHTML
+                    );
+                  } else {
+                    // If API call fails or returns no name, show category-based name if possible
+                    const categoryName =
+                      data.data && data.data.category
+                        ? data.data.category.name
+                        : null;
+                    element.textContent = categoryName
+                      ? `${categoryName} Product`
+                      : "Product";
+                    // Update the cached HTML in localStorage
+                    localStorage.setItem(
+                      "miniCartHtml",
+                      document.querySelector(".mini-cart-items").innerHTML
+                    );
+                  }
+                })
+                .catch((error) => {
+                  console.error(
+                    `Error fetching product name for ID ${productId}:`,
+                    error
+                  );
+                  element.textContent = "Product";
+                  // Update the cached HTML in localStorage
+                  localStorage.setItem(
+                    "miniCartHtml",
+                    document.querySelector(".mini-cart-items").innerHTML
+                  );
+                });
+            }
+          }
+        });
+      }
+
+      // Function to load mini wishlist preview content
+      function loadMiniWishlistPreview() {
+        const miniWishlistItems = document.querySelector(
+          ".mini-wishlist-items"
+        );
+        if (!miniWishlistItems) return;
+
+        // Check if we already loaded this recently (cache for 5 minutes)
+        const lastLoad = localStorage.getItem("miniWishlistLastLoad");
+        const now = Date.now();
+        if (
+          lastLoad &&
+          now - parseInt(lastLoad) < 300000 && // 5 minutes cache
+          localStorage.getItem("miniWishlistHtml")
+        ) {
+          miniWishlistItems.innerHTML =
+            localStorage.getItem("miniWishlistHtml");
+          return;
+        }
+
+        // Show loading
+        miniWishlistItems.innerHTML =
+          '<div class="mini-wishlist-loading">Loading wishlist items...</div>';
+
+        // Fetch wishlist items
+        fetch("/wishlist/mini")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to load wishlist");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.items && data.items.length > 0) {
+              // Wishlist has items
+              let html = "";
+              data.items.forEach((item) => {
+                html += `
+                  <div class="mini-wishlist-item">
+                    <img src="${item.image}" alt="${item.name}" class="mini-wishlist-item-img">
+                    <div class="mini-wishlist-item-details">
+                      <h5 class="mini-wishlist-item-title">${item.name}</h5>
+                      <p class="mini-wishlist-item-price">${item.price}</p>
+                    </div>
+                    <button class="mini-wishlist-item-remove" onclick="removeFromWishlist(${item.id})">×</button>
+                  </div>
+                `;
+              });
+
+              miniWishlistItems.innerHTML = html;
+
+              // Cache the result
+              localStorage.setItem("miniWishlistHtml", html);
+              localStorage.setItem("miniWishlistLastLoad", now.toString());
+            } else {
+              // Wishlist is empty
+              miniWishlistItems.innerHTML =
+                '<div class="mini-wishlist-empty">Your wishlist is empty</div>';
+              localStorage.setItem(
+                "miniWishlistHtml",
+                miniWishlistItems.innerHTML
+              );
+              localStorage.setItem("miniWishlistLastLoad", now.toString());
+            }
+          })
+          .catch((error) => {
+            miniWishlistItems.innerHTML =
+              '<div class="mini-wishlist-error">Failed to load wishlist items</div>';
+            console.error("Error loading wishlist:", error);
+          });
+      }
+
+      // Function to remove item from wishlist
+      function removeFromWishlist(productId) {
+        fetch("/wishlist/remove", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document
+              .querySelector('meta[name="_csrf"]')
+              ?.getAttribute("content"),
+          },
+          body: JSON.stringify({ productId }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            updateWishlistCount(data.wishlistCount || 0);
+            showToast("Success", "Item removed from wishlist", "success");
+
+            // Clear cache and reload mini wishlist
+            localStorage.removeItem("miniWishlistHtml");
+            localStorage.removeItem("miniWishlistLastLoad");
+            loadMiniWishlistPreview();
+          })
+          .catch((error) => {
+            showToast("Error", "Failed to remove item from wishlist", "error");
+            console.error("Error removing from wishlist:", error);
+          });
+      }
+    </script>
+
+    <!-- Cart Counter Visibility Fix Script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Make sure cart counters are visible
+        const cartCounters = document.querySelectorAll(".cart-counter");
+        cartCounters.forEach((counter) => {
+          // Make sure cart counters have proper styling
+          counter.style.display = "flex";
+          counter.style.zIndex = "100";
+
+          // Add animation when count changes
+          const currentCount = counter.textContent.trim();
+          counter.setAttribute("data-last-count", currentCount);
+
+          // Store initial count for change detection
+          window.lastCartCount = currentCount;
+
+          // If count is zero, still show the counter but smaller
+          if (currentCount === "0") {
+            counter.style.width = "18px";
+            counter.style.height = "18px";
+            counter.style.fontSize = "10px";
+          } else {
+            counter.style.width = "22px";
+            counter.style.height = "22px";
+          }
+        });
+      });
+
+      // Function to update cart counters
+      function updateCartCounter(count) {
+        const cartCounters = document.querySelectorAll(".cart-counter");
+        cartCounters.forEach((counter) => {
+          // Always ensure counter is visible
+          counter.style.display = "flex";
+          counter.style.zIndex = "100";
+
+          counter.textContent = count;
+          counter.classList.add("cart-counter-update");
+
+          // Remove animation class after animation completes
+          setTimeout(() => {
+            counter.classList.remove("cart-counter-update");
+          }, 500);
+
+          // Adjust size based on count digits
+          if (count > 9) {
+            counter.style.width = "24px";
+          } else {
+            counter.style.width = count > 0 ? "22px" : "20px";
+            counter.style.fontSize = count > 0 ? "12px" : "10px";
+          }
+        });
+      }
+    </script>
+
+    <!-- Script loading order is important for modal functionality -->
+    <script th:src="@{/js/modal-unified.js}"></script>
+    <script th:src="@{/js/modal-fix.js}"></script>
+    <script th:src="@{/js/product-categories-updated.js}"></script>
+    <script th:src="@{/js/furniture-categories.js}"></script>
+    <script th:src="@{/js/home-product-meta.js}"></script>
+    <script th:src="@{/js/home-product-fetch-1.js}"></script>
+    <script th:src="@{/js/toast-notifications-1.js}"></script>
+    <script th:src="@{/js/sidebar-modal-integration.js}"></script>
+    <script th:src="@{/js/emergency-modal-fix.js}"></script>
+    <script th:src="@{/js/modal-showcase-fix.js}"></script>
+    <script th:src="@{/js/modal-debug.js}"></script>
+    <script th:src="@{/js/modal-verification.js}"></script>
+    <script>
+      // Attach cart/wishlist event listeners after dynamic products are rendered
+      document.addEventListener("DOMContentLoaded", function () {
+        function delegateEvent(parent, selector, event, handler) {
+          parent.addEventListener(event, function (e) {
+            const target = e.target.closest(selector);
+            if (target) handler(target, e);
+          });
+        }
+        // Wait for products to be rendered
+        function setupProductActions() {
+          const featuredGrid = document.querySelector(
+            ".product-main .product-grid"
+          );
+          const newArrivals = document.querySelector(
+            ".product-minimal .showcase-wrapper .showcase-container"
+          );
+          // Add additional containers where product buttons might appear (modals, etc.)
+          const allContainers = [
+            featuredGrid,
+            newArrivals,
+            document.querySelector(".modal-products"), // For modal product displays
+            document.querySelector(".wishlist-items-container"), // For wishlist
+          ];
+
+          allContainers.forEach((container) => {
+            if (!container) return;
+            // Add to Cart - using data attributes instead of onclick
+            delegateEvent(
+              container,
+              '[data-cart-action="add"]',
+              "click",
+              (btn, e) => {
+                e.preventDefault();
+                const id = parseInt(btn.getAttribute("data-product-id"));
+                addToCart(id);
+              }
+            );
+            // Add to Wishlist
+            delegateEvent(
+              container,
+              '.btn-action[onclick^="addToWishlist"]',
+              "click",
+              (btn, e) => {
+                e.preventDefault();
+                const id = parseInt(
+                  btn.getAttribute("onclick").match(/\d+/)[0]
+                );
+                addToWishlist(id);
+              }
+            );
+            // Quick View
+            delegateEvent(
+              container,
+              '.btn-action[onclick^="quickView"]',
+              "click",
+              (btn, e) => {
+                e.preventDefault();
+                const id = parseInt(
+                  btn.getAttribute("onclick").match(/\d+/)[0]
+                );
+                quickView(id);
+              }
+            );
+          });
+        }
+        // Wait for dynamic rendering
+        setTimeout(setupProductActions, 500);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+/* Fix for sidebar layout - ensures main content doesn't leave space for hidden sidebar */
+@media (min-width: 769px) {
+  /* Hide the regular sidebar completely */
+  .sidebar:not(.floating-sidebar) {
+    width: 0 !important;
+    overflow: hidden;
+    display: none !important;
+    position: absolute;
+    left: -9999px;
+  }
+
+  /* Fix main content area */
+  main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    transition: none !important;
+  }
+
+  /* Ensure header is centered properly */
+  .main-header {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+
+  /* Make sure floating sidebar stays on top */
+  .floating-sidebar {
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+}
